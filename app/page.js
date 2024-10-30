@@ -50,7 +50,7 @@ export default function Home() {
                   New Analysis
                 </button>
               </Link>
-              <Link href="/questions">
+              <Link href="/generated-questions">
                 <button className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
                   Generated Questions
                 </button>
