@@ -2,9 +2,8 @@ import axios from 'axios';
 
 export async function POST(request) {
   const { inputs } = await request.json();
-  const token = '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'; // Keep this token secure
+  const hfApiKey = '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'; // Replace with your Hugging Face API key
 
-  // Check if inputs are provided
   if (!inputs) {
     return new Response(JSON.stringify({ error: 'No inputs provided' }), {
       status: 400,
@@ -14,31 +13,33 @@ export async function POST(request) {
 
   try {
     const response = await axios.post(
-      'https://api-inference.huggingface.co/models/t5-small', // Updated endpoint
-      { inputs: `generate questions: ${inputs}` }, // Ensure the prompt is set for question generation
+      'https://api-inference.huggingface.co/models/ZhangCheng/T5-Base-finetuned-for-Question-Generation',
+      { inputs: `generate questions: ${inputs}` },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${hfApiKey}`,
           'Content-Type': 'application/json',
         },
       }
     );
 
-    // Check if the response data is in the expected format
+    // Parse the response to extract generated questions
     if (response.data && Array.isArray(response.data)) {
-      // Extract generated questions from response
-      const questions = response.data.map(item => item.generated_text || item.text || item); // Adjust based on actual response structure
-      return new Response(JSON.stringify(questions), {
+      const questions = response.data.map((item) => item.generated_text).filter(Boolean);
+      return new Response(JSON.stringify({ questions }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
     } else {
-      throw new Error('Unexpected response structure');
+      throw new Error('Unexpected response format from Hugging Face API');
     }
   } catch (error) {
     console.error('Error communicating with Hugging Face:', error.response ? error.response.data : error.message);
     return new Response(
-      JSON.stringify({ error: 'Failed to generate questions', details: error.response ? error.response.data : error.message }),
+      JSON.stringify({
+        error: 'Failed to generate questions',
+        details: error.response ? error.response.data : error.message,
+      }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },

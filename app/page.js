@@ -12,7 +12,7 @@ export default function Home() {
       {/* Header Section */}
       <header className="bg-gray-800 shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">My Service</h1>
+          <h1 className="text-xl font-bold">PromptWiki</h1>
 
           {/* Hamburger Icon for Mobile */}
           <div className="md:hidden">

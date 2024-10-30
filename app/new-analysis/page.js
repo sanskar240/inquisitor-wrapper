@@ -1,16 +1,18 @@
 "use client"; // Ensure this is at the top of the file
 import React, { useState } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 
 const NewAnalysis = () => {
   const [text, setText] = useState('');
-  const [questions, setQuestions] = useState([]); // Store generated questions
+  const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setQuestions([]);
     setError('');
 
     if (!text.trim()) {
@@ -19,31 +21,37 @@ const NewAnalysis = () => {
       return;
     }
 
-    const prompt = `generate questions: ${text}`; // Prepare the prompt for question generation
-
-    const fetchQuestions = async (attempt = 1) => {
-      try {
-        const response = await axios.post('http://localhost:3000/api/generate', { inputs: prompt });
-
-        if (Array.isArray(response.data)) {
-          setQuestions(response.data); // Assuming response.data is an array of generated questions
-        } else {
-          setError('Unexpected response format from the API');
+    try {
+      const response = await axios.post(
+        'https://api-inference.huggingface.co/models/ZhangCheng/T5-Base-finetuned-for-Question-Generation',
+        { inputs: text },
+        {
+          headers: {
+            Authorization: `Bearer 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`,
+            'Content-Type': 'application/json',
+          },
         }
-      } catch (err) {
-        if (err.response && err.response.data && err.response.data.details && err.response.data.details.error.includes("loading") && attempt < 5) {
-          // Wait for a while before retrying
-          setTimeout(() => fetchQuestions(attempt + 1), 20000); // Retry after 20 seconds
-        } else {
-          setError('Error generating questions. Please try again.');
-          console.error('Error details:', err.response ? err.response.data : err.message);
+      );
+
+      if (response.data && Array.isArray(response.data)) {
+        const generatedQuestions = response.data.map((item) => item.generated_text).filter(Boolean);
+        setQuestions(generatedQuestions);
+        if (generatedQuestions.length === 0) {
+          setError('No questions generated. Please try different input.');
         }
-      } finally {
-        setLoading(false);
+      } else {
+        setError('Unexpected response format from the API.');
       }
-    };
-
-    fetchQuestions(); // Start fetching questions
+    } catch (err) {
+      if (err.response && err.response.status === 403) {
+        setError('Invalid or missing API token for Hugging Face.');
+      } else {
+        setError('Error generating questions. Please try again later.');
+      }
+      console.error('Error details:', err.response ? err.response.data : err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,9 +59,11 @@ const NewAnalysis = () => {
       <header className="bg-gray-800 shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold">New Analysis</h1>
-          <button className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
-            Back
-          </button>
+          <Link href='/'>
+            <button className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
+              Back
+            </button>
+          </Link>
         </div>
       </header>
 
@@ -66,25 +76,24 @@ const NewAnalysis = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className={`px-4 py-2 rounded ${loading ? 'bg-gray-600' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
             disabled={loading}
           >
             {loading ? 'Generating...' : 'Generate Questions'}
           </button>
         </form>
 
-        <div className="mt-4">
+        <div className="mt-4 w-full max-w-lg">
           <h3 className="text-xl font-bold">Generated Questions:</h3>
-          {error && <p className="text-red-500">{error}</p>}
-          {questions.length > 0 ? (
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {!error && questions.length > 0 ? (
             questions.map((question, index) => (
-              <p key={index} className="text-gray-400">{question.translation_text || question}</p> // Adjusted to extract translation_text
+              <p key={index} className="text-gray-400 mt-2">{question}</p>
             ))
-          ) : (
-            <p className="text-gray-400">Questions will be displayed here.</p>
+          ) : !error && !loading && (
+            <p className="text-gray-400 mt-2">Questions will be displayed here after generation.</p>
           )}
         </div>
       </main>
@@ -97,4 +106,3 @@ const NewAnalysis = () => {
 };
 
 export default NewAnalysis;
-
