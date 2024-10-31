@@ -1,11 +1,11 @@
-"use client";
+"use client"; // Ensure this is at the top of the file
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 
 const ChatInterface = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const initialQuestion = searchParams.get('question') || '';
   const [input, setInput] = useState(initialQuestion);
   const [messages, setMessages] = useState([
@@ -18,11 +18,22 @@ const ChatInterface = () => {
     }
   }, [initialQuestion]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
-    setMessages([...messages, { role: 'user', content: input }]);
+    const userMessage = { role: 'user', content: input };
+    setMessages([...messages, userMessage]);
     setInput(''); // Clear the input field after sending the message
+
+    try {
+      const response = await axios.post('/api/chat', { message: input });
+      const assistantMessage = { role: 'assistant', content: response.data.message };
+      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessage = { role: 'assistant', content: 'Sorry, there was an error. Please try again later.' };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    }
   };
 
   return (
