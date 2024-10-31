@@ -1,4 +1,5 @@
-"use client"; // Ensure this is at the top of the file
+// ChatInterface.js
+"use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
@@ -11,6 +12,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! How can I help you today?' },
   ]);
+  const [isLoading, setIsLoading] = useState(false); // Loading indicator state
 
   useEffect(() => {
     if (initialQuestion) {
@@ -24,6 +26,7 @@ const ChatInterface = () => {
     const userMessage = { role: 'user', content: input };
     setMessages([...messages, userMessage]);
     setInput(''); // Clear the input field after sending the message
+    setIsLoading(true); // Start loading indicator
 
     try {
       const response = await axios.post('/api/chat', { message: input });
@@ -31,8 +34,13 @@ const ChatInterface = () => {
       setMessages((prevMessages) => [...prevMessages, assistantMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
-      const errorMessage = { role: 'assistant', content: 'Sorry, there was an error. Please try again later.' };
+      const errorMessage = {
+        role: 'assistant',
+        content: 'Sorry, there was an error. Please try again later.',
+      };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    } finally {
+      setIsLoading(false); // Stop loading indicator
     }
   };
 
@@ -57,6 +65,11 @@ const ChatInterface = () => {
             </div>
           </div>
         ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="p-3 bg-gray-700 rounded-lg max-w-xs">Loading...</div>
+          </div>
+        )}
       </div>
 
       <div className="bg-gray-800 p-4 flex items-center">
