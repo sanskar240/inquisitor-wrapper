@@ -81,21 +81,21 @@ export default function Home() {
         <h3 className="text-3xl font-semibold mb-6 text-center">Why Choose PromptWiki?</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-            <h4 className="text-2xl font-bold mb-3 text-blue-400">Real-Time Analysis</h4>
+            <h4 className="text-2xl font-bold mb-3 text-blue-400">Maximize Your Creativity</h4>
             <p className="text-gray-400">
-              Instantly analyze and generate insights with advanced AI tools tailored to your needs.
+              Unlock endless creative possibilities with our dynamic prompt generation tools designed to inspire your writing and content creation.
             </p>
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-            <h4 className="text-2xl font-bold mb-3 text-blue-400">Collaborative Platform</h4>
+            <h4 className="text-2xl font-bold mb-3 text-blue-400">Gain Deep Insights Instantly</h4>
             <p className="text-gray-400">
-              Work together seamlessly, sharing and reviewing content across teams.
+              Transform complex information into clear, actionable insights that empower you to make informed decisions quickly and efficiently.
             </p>
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-            <h4 className="text-2xl font-bold mb-3 text-blue-400">Powerful Analytics</h4>
+            <h4 className="text-2xl font-bold mb-3 text-blue-400">Collaborate and Learn Together</h4>
             <p className="text-gray-400">
-              Gain valuable insights with data-driven analytics to make informed decisions.
+              Join a thriving community where you can collaborate, share feedback, and learn from others to enhance your content and ideas.
             </p>
           </div>
         </div>

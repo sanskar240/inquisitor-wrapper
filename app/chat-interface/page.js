@@ -1,8 +1,8 @@
-// ChatInterface.js
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import PromptRecommender from '../(components)/PromptRecommender';
 
 const ChatInterface = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ const ChatInterface = () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
-    setMessages([...messages, userMessage]);
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput(''); // Clear the input field after sending the message
     setIsLoading(true); // Start loading indicator
 
@@ -71,6 +71,9 @@ const ChatInterface = () => {
           </div>
         )}
       </div>
+
+      {/* Include the PromptRecommender component here */}
+      <PromptRecommender userInput={input} />
 
       <div className="bg-gray-800 p-4 flex items-center">
         <input
