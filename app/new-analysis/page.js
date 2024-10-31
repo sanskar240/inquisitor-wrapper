@@ -1,13 +1,17 @@
-"use client"; // Ensure this is at the top of the file
+// NewAnalysis component
+
+"use client";
 import React, { useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const NewAnalysis = () => {
     const [text, setText] = useState('');
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,9 +41,7 @@ const NewAnalysis = () => {
                 const generatedQuestions = response.data.map((item) => item.generated_text).filter(Boolean);
                 setQuestions(generatedQuestions);
 
-                // Send generated questions to your backend for storage
                 const saveResponse = await axios.post('/api/questions', { questions: generatedQuestions });
-
                 if (saveResponse.status === 200) {
                     console.log('Questions saved successfully:', saveResponse.data);
                 } else {
@@ -62,6 +64,12 @@ const NewAnalysis = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handlePromptInChat = () => {
+        // Ensure that question is passed as a valid string in the URL
+        const question = typeof questions[0] === 'string' ? questions[0] : '';
+        router.push(`/chat-interface?question=${encodeURIComponent(question)}`);
     };
 
     return (
@@ -99,9 +107,19 @@ const NewAnalysis = () => {
                     <h3 className="text-xl font-bold">Generated Questions:</h3>
                     {error && <p className="text-red-500 mt-2">{error}</p>}
                     {!error && questions.length > 0 ? (
-                        questions.map((question, index) => (
-                            <p key={index} className="text-gray-400 mt-2">{question}</p>
-                        ))
+                        <>
+                            {questions.map((question, index) => (
+                                <p key={index} className="text-gray-400 mt-2">{question}</p>
+                            ))}
+
+                            {/* Button to redirect to Chat Interface */}
+                            <button
+                                onClick={handlePromptInChat}
+                                className="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+                            >
+                                Prompt in Chat
+                            </button>
+                        </>
                     ) : !error && !loading && (
                         <p className="text-gray-400 mt-2">Questions will be displayed here after generation.</p>
                     )}

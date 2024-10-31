@@ -55,7 +55,7 @@ export default function Home() {
                   Generated Questions
                 </button>
               </Link>
-              <Link href="/chat">
+              <Link href="/chat-interface">
                 <button className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">
                   Chat Interface
                 </button>
