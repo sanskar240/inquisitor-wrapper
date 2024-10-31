@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ClipLoader } from 'react-spinners';
 
+
 const NewAnalysis = () => {
     const [text, setText] = useState('');
     const [questions, setQuestions] = useState([]);
@@ -77,9 +78,9 @@ const NewAnalysis = () => {
             <ToastContainer />
             <header className="bg-gray-800 shadow-lg p-4">
                 <div className="container mx-auto flex justify-between items-center">
-                    <h1 className="text-2xl font-bold">New Analysis</h1>
+                    <h1 className="text-3xl font-bold">New Analysis</h1>
                     <Link href='/'>
-                        <button className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-200">
+                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded transition duration-200">
                             Back
                         </button>
                     </Link>
@@ -110,7 +111,7 @@ const NewAnalysis = () => {
                     {!error && questions.length > 0 ? (
                         <ul className="list-disc list-inside mt-4 text-gray-400">
                             {questions.map((question, index) => (
-                                <li key={index} className="mt-2 animate-pulse">{question}</li>
+                                <li key={index} className="mt-2">{question}</li>
                             ))}
                         </ul>
                     ) : !error && !loading && (
@@ -120,7 +121,7 @@ const NewAnalysis = () => {
                     {questions.length > 0 && (
                         <button
                             onClick={handlePromptInChat}
-                            className="mt-4 w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition duration-200"
+                            className="mt-4 w-full px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition duration-200"
                         >
                             Prompt in Chat
                         </button>
