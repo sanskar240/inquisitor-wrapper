@@ -44,6 +44,12 @@ const ChatInterface = () => {
     }
   };
 
+  // Function to handle prompt selection
+  const handlePromptSelect = (selectedPrompt) => {
+    setInput(selectedPrompt); // Set the input to the selected prompt
+    handleSend(); // Send the prompt as a message
+  };
+
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">
       <header className="bg-gray-800 p-4 text-center text-lg font-semibold">
@@ -73,7 +79,7 @@ const ChatInterface = () => {
       </div>
 
       {/* Include the PromptRecommender component here */}
-      <PromptRecommender userInput={input} />
+      <PromptRecommender userInput={input} onPromptSelect={handlePromptSelect} />
 
       <div className="bg-gray-800 p-4 flex items-center">
         <input
