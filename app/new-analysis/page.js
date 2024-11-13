@@ -106,7 +106,7 @@ const NewAnalysis = () => {
                 </form>
 
                 <div className="mt-6 w-full max-w-xl">
-                    <h3 className="text-2xl font-bold">Generated Questions:</h3>
+                    <h3 className="text-2xl font-bold">Generated Prompts:</h3>
                     {error && <p className="text-red-500 mt-2">{error}</p>}
                     {!error && questions.length > 0 ? (
                         <ul className="list-disc list-inside mt-4 text-gray-400">
