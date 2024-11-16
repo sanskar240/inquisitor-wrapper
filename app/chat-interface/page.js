@@ -1,34 +1,23 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
 import axios from 'axios';
+import '../(components)/PromptRecommender';
 import PromptRecommender from '../(components)/PromptRecommender';
-
 const ChatInterface = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialQuestion = searchParams.get('question') || '';
-  const [input, setInput] = useState(initialQuestion);
+  const [input, setInput] = useState('');
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! How can I help you today?' },
   ]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPromptRecommender, setShowPromptRecommender] = useState(true); // Add this state to control visibility
-
-  useEffect(() => {
-    if (initialQuestion) {
-      setInput(initialQuestion);
-    }
-  }, [initialQuestion]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInput('');
+    
     setIsLoading(true);
-
+    
     try {
       const response = await axios.post('/api/chat', { message: input });
       const assistantMessage = { role: 'assistant', content: response.data.message };
@@ -48,11 +37,6 @@ const ChatInterface = () => {
   const handlePromptSelect = (selectedPrompt) => {
     setInput(selectedPrompt);
     handleSend();
-  };
-
-  // Optional: Toggle visibility of the prompt recommender (if needed)
-  const togglePromptVisibility = () => {
-    setShowPromptRecommender(prev => !prev);
   };
 
   return (
@@ -76,8 +60,8 @@ const ChatInterface = () => {
         )}
       </div>
 
-      {/* Show PromptRecommender only when the state allows it */}
-      {showPromptRecommender && <PromptRecommender userInput={input} onPromptSelect={handlePromptSelect} />}
+      {/* Always show PromptRecommender */}
+      <PromptRecommender userInput={input} onPromptSelect={handlePromptSelect} />
 
       <div className="bg-gray-800 p-4 flex items-center">
         <input
