@@ -1,4 +1,3 @@
-// app/api/chat/route.js
 import axios from 'axios';
 
 export async function POST(req) {
@@ -8,9 +7,11 @@ export async function POST(req) {
         return new Response(JSON.stringify({ error: 'Message is required.' }), { status: 400 });
     }
 
-    const apiEndpoint = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium';
+    // Updated API endpoint for BlenderBot
+    const apiEndpoint = 'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill';
+    
     const headers = {
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer hf_YOUR_API_KEY`,  // Replace with your own Hugging Face API key
         'Content-Type': 'application/json',
     };
 
@@ -35,6 +36,3 @@ export async function POST(req) {
         return new Response(JSON.stringify({ error: 'Service is currently unavailable. Please try again later.' }), { status: 500 });
     }
 }
-
-
-//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
