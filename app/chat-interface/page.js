@@ -12,7 +12,8 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! How can I help you today?' },
   ]);
-  const [isLoading, setIsLoading] = useState(false); // Loading indicator state
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPromptRecommender, setShowPromptRecommender] = useState(true); // Add this state to control visibility
 
   useEffect(() => {
     if (initialQuestion) {
@@ -25,8 +26,8 @@ const ChatInterface = () => {
 
     const userMessage = { role: 'user', content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInput(''); // Clear the input field after sending the message
-    setIsLoading(true); // Start loading indicator
+    setInput('');
+    setIsLoading(true);
 
     try {
       const response = await axios.post('/api/chat', { message: input });
@@ -40,14 +41,18 @@ const ChatInterface = () => {
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
     } finally {
-      setIsLoading(false); // Stop loading indicator
+      setIsLoading(false);
     }
   };
 
-  // Function to handle prompt selection
   const handlePromptSelect = (selectedPrompt) => {
-    setInput(selectedPrompt); // Set the input to the selected prompt
-    handleSend(); // Send the prompt as a message
+    setInput(selectedPrompt);
+    handleSend();
+  };
+
+  // Optional: Toggle visibility of the prompt recommender (if needed)
+  const togglePromptVisibility = () => {
+    setShowPromptRecommender(prev => !prev);
   };
 
   return (
@@ -58,15 +63,8 @@ const ChatInterface = () => {
 
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div
-              className={`p-3 rounded-lg max-w-xs ${
-                msg.role === 'user' ? 'bg-blue-600' : 'bg-gray-700'
-              }`}
-            >
+          <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`p-3 rounded-lg max-w-xs ${msg.role === 'user' ? 'bg-blue-600' : 'bg-gray-700'}`}>
               {msg.content}
             </div>
           </div>
@@ -78,8 +76,8 @@ const ChatInterface = () => {
         )}
       </div>
 
-      {/* Include the PromptRecommender component here */}
-      <PromptRecommender userInput={input} onPromptSelect={handlePromptSelect} />
+      {/* Show PromptRecommender only when the state allows it */}
+      {showPromptRecommender && <PromptRecommender userInput={input} onPromptSelect={handlePromptSelect} />}
 
       <div className="bg-gray-800 p-4 flex items-center">
         <input
