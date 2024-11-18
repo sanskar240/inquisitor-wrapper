@@ -38,7 +38,7 @@ const PromptRecommender = ({ userInput, onPromptSelect }) => {
 
   return (
     <div className="bg-gray-900 p-6 rounded-lg mt-4 shadow-lg">
-      <h3 className="text-xl font-semibold text-gray-200 mb-4">Suggested Prompts by Bloom's Taxonomy</h3>
+      <h3 className="text-xl font-semibold text-gray-200 mb-4">Suggested Prompts by Bloom&apos;s Taxonomy</h3>
       {Object.entries(suggestedPrompts).map(([level, prompts]) => (
         <div key={level} className="mb-3">
           <button

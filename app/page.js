@@ -108,13 +108,13 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-gray-800 p-6 rounded-lg shadow-md">
               <p className="text-gray-400">
-                "PromptWiki has transformed our workflow. We save so much time with its collaborative tools!"
+                &quot;PromptWiki has transformed our workflow. We save so much time with its collaborative tools!&quot;
               </p>
               <h5 className="text-blue-400 mt-4 font-semibold">— Alex, Product Manager</h5>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg shadow-md">
               <p className="text-gray-400">
-                "The analytics features help us make smarter decisions quickly. Highly recommend!"
+                &quot;The analytics features help us make smarter decisions quickly. Highly recommend!&quot;
               </p>
               <h5 className="text-blue-400 mt-4 font-semibold">— Mia, Data Analyst</h5>
             </div>
